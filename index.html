@@ -7,8 +7,15 @@
             var reader = new FileReader();
             reader.onload = function(){
                 var base64String = reader.result.split(',')[1]; // Remove metadata
+                
                 console.log("Base64:", base64String);  // Debugging (Check Console)
-                window.ReactNativeWebView.postMessage(base64String);  // Send to Thunkable
+                
+                // ✅ Prevent Error: Only send to Web Viewer if available
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(base64String);  // Send to Thunkable
+                } else {
+                    alert("This page is running in a normal browser. Use Thunkable Web Viewer.");
+                }
             }
             reader.readAsDataURL(event.target.files[0]);
         });
